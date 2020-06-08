@@ -2,6 +2,10 @@ import React from "react";
 import "./Home.css";
 import { Carousel, CarouselControl, CarouselItem } from "reactstrap";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../../constants/API";
+import Axios from "axios";
+import ProductCard from "../../../view/components/Cards/ProductCard"
+
 import Blackpink from "../../../assets/images/showcase/Blackpink.jpg";
 import Twice from "../../../assets/images/showcase/Twice.jpg";
 import redVelvet from "../../../assets/images/showcase/RedVelvet.jpg";
@@ -25,7 +29,7 @@ class Home extends React.Component {
   state = {
     activeIndex: 0,
     animating: false,
-    bestSellerData: [],
+    concertData: [],
     categoryFilter: "",
   };
 
@@ -39,13 +43,13 @@ class Home extends React.Component {
         >
           <div className="carousel-item-home">
             <div className="container position-relative">
-              <div className="row" style={{ paddingTop: "80px" }}>
+              <div className="row" style={{ paddingTop: "30px" }}>
                 <div className="col-6 text-white position-relative"></div>
                 <div className="col-12 d-flex flex-row justify-content-center">
                   <img
                     src={image}
                     alt=""
-                    style={{ height: "750px", objectFit: "contain" }}
+                    style={{ height: "500px", objectFit: "contain" }}
                   />
                 </div>
               </div>
@@ -73,6 +77,40 @@ class Home extends React.Component {
         : this.state.activeIndex - 1;
     this.setState({ activeIndex: prevIndex });
   };
+
+  getConcertData = (currCategory = null) => {
+    Axios.get(`${API_URL}/concerts`, {
+      params: {
+        category: currCategory,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ concertData: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  componentDidMount() {
+    this.getConcertData();
+
+  }
+
+  renderConcert = () => {
+    return this.state.concertData.map((val) => {
+    
+      return (<Link
+        style={{ textDecoration: "none", color: "inherit" }}
+        to={`/product/${val.id}`}
+      >
+        <ProductCard data={val} className="m-2" />
+      </Link>);
+    });
+    
+  };
+
   render() {
     return (
       <div>
@@ -80,21 +118,21 @@ class Home extends React.Component {
           <Link
             to="/"
             style={{ color: "inherit" }}
-            onClick={() => this.setState({ categoryFilter: "" })}
+            onClick={() => this.setState({ categoryFilter: "boygroup" })}
           >
             <h6 className="mx-4 font-weight-bold">Boygroup</h6>
           </Link>
           <Link
             to="/"
             style={{ color: "inherit" }}
-            onClick={() => this.setState({ categoryFilter: "phone" })}
+            onClick={() => this.setState({ categoryFilter: "" })}
           >
             <h6 className="mx-4 font-weight-bold">All</h6>
           </Link>
           <Link
             to="/"
             style={{ color: "inherit" }}
-            onClick={() => this.setState({ categoryFilter: "laptop" })}
+            onClick={() => this.setState({ categoryFilter: "girlgroup" })}
           >
             <h6 className="mx-4 font-weight-bold">GirlGroup</h6>
           </Link>
@@ -118,6 +156,9 @@ class Home extends React.Component {
             onClickHandler={this.nextHandler}
           />
         </Carousel>
+        <div className="row d-flex flex-wrap justify-content-center">
+        {this.renderConcert()}
+        </div>
       </div>
     );
   }
