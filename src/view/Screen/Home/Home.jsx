@@ -3,6 +3,7 @@ import "./Home.css";
 import { Carousel, CarouselControl, CarouselItem } from "reactstrap";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../../constants/API";
+
 import Axios from "axios";
 import ProductCard from "../../../view/components/Cards/ProductCard"
 
@@ -159,6 +160,18 @@ class Home extends React.Component {
         <div className="row d-flex flex-wrap justify-content-center">
         {this.renderConcert()}
         </div>
+        <div className="py-5" style={{ marginTop: "100px", backgroundColor: "#ffcce5"}}>
+        <div className="col-4 text-center d-flex flex-column align-items-center">
+                <img src="https://image.flaticon.com/icons/png/512/1325/1325982.png" alt="" height="300px" width="300px"/>
+                <h3 className="font-weight-bolder mt-4">100% REFUND</h3>
+                <p className="mt-4">
+                If you are not 100% satisfied with your purchase, you can return the product and get a full refund or exchange the product for another one, be it similar or not.
+                </p>
+              </div>
+        </div>
+        <footer className="text-center"> 
+          <h5>Copyright 2020 AS Entertaiment</h5>
+        </footer>
       </div>
     );
   }

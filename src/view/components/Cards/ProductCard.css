@@ -16,6 +16,7 @@
   box-sizing: border-box;
   width: 259px;
   border: 1px solid var(--gray-divider);
+  
 }
 
 .product-card:hover {

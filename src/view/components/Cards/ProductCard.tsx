@@ -37,26 +37,7 @@ class ProductCard extends React.Component<ProductCardProps> {
           </h5>
           <p className="small">{this.props.data.location}</p>
         </div>
-        <div className="d-flex flex-row align-items-center justify-content-between mt-2">
-          <div>
-            <div className="d-flex flex-row align-items-center justify-content-between">
-              {/* Render stars dynamically */}
-              <FontAwesomeIcon style={{ fontSize: "10px" }} icon={faStar} />
-              <FontAwesomeIcon style={{ fontSize: "10px" }} icon={faStar} />
-              <FontAwesomeIcon style={{ fontSize: "10px" }} icon={faStar} />
-              <FontAwesomeIcon style={{ fontSize: "10px" }} icon={faStar} />
-              <FontAwesomeIcon style={{ fontSize: "10px" }} icon={faStar} />
-              <small className="ml-2">4.5</small>
-            </div>
-          </div>
-          <ButtonUI
-            type="outlined"
-            style={{ fontSize: "12px", padding: "4px 8px" }}
-          >
-            {" "}
-            <FontAwesomeIcon icon={faHeart} /> Add to wishlist
-          </ButtonUI>
-        </div>
+       
       </div>
     );
   }
