@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ButtonUI from "../Button/Button";
 import "./Navbar.css";
 
 class Navbar extends React.Component {
@@ -47,6 +48,16 @@ class Navbar extends React.Component {
             }}
           />
         </div>
+        <ButtonUI className="mr-3" type="textual">
+          <Link style={{ textDecoration: "none", color: "inherit" }} to="/auth">
+            Sign in
+          </Link>
+        </ButtonUI>
+        <ButtonUI type="contained">
+          <Link style={{ textDecoration: "none", color: "inherit" }} to="/auth">
+            Sign up
+          </Link>
+        </ButtonUI>
       </div>
     );
   }
