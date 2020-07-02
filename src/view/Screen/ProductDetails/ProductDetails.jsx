@@ -11,13 +11,15 @@ import { API_URL } from "../../../constants/API";
 
 class ProductDetails extends React.Component {
   state = {
+    category: "vvip",
     concertData: {
       image: "",
       concertName: "",
       artist: "",
-      price: 0,
+      vvipPrice: 0,
+      vipPrice: 0,
+      regularPrice: 0,
       desc: "",
-      category: "",
       id: 0,
     },
   };
@@ -75,12 +77,39 @@ class ProductDetails extends React.Component {
     Axios.get(`${API_URL}/concerts/${this.props.match.params.concertId}`)
       .then((res) => {
         this.setState({ concertData: res.data });
-        console.log(res.data);
+        // console.log(this.state.concertData.vvipPrice);
       })
       .catch((err) => {
         console.log(err);
       });
+    this.renderConcertPrice();  
+    console.log(this.state.category)
   }
+  
+  renderConcertPrice = () => {
+    console.log(this.state.category)
+    console.log(this.state.concertData.vvipPrice);
+    switch (this.state.category) {
+      case "vvip":
+        return this.state.concertData.vvipPrice;
+      case "vip":
+        return this.state.concertData.vipPrice;
+      case "regular":
+        return this.state.concertData.regularPrice;
+      default:
+        return 0;
+    }
+  };
+
+  inputHandler = (e, field, form) => {
+    let { value } = e.target;
+    this.setState({
+        [form]: {
+            ...this.state[form],
+            [field]: value,
+        },
+    });
+};
 
   render() {
     const {
@@ -105,12 +134,29 @@ class ProductDetails extends React.Component {
           <div className="col-6 d-flex flex-column justify-content-center">
             <h3>{concertName}</h3>
             <h4>{artist}</h4>
-            <h4>
+            <div className="d-flex justify-content-between my-2 align-items-center">
+              <h5>Category :</h5>
+              <select
+                value={this.state.category}
+                onChange={(e) =>
+                  this.setState({
+                    category: e.target.value,
+                  })
+                }
+                className="form-control w-50"
+              >
+                <option value="vvip">VVIP</option>
+                <option value="vip">VIP</option>
+                <option value="regular">REGULAR</option>
+              </select>
+              {console.log(this.state.category)}
+            </div>
+            <h5>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR",
-              }).format(price)}
-            </h4>
+              }).format(this.renderConcertPrice())}
+            </h5>
             <p className="mt-4">{desc}</p>
             {/* <TextField type="number" placeholder="Quantity" className="mt-3" /> */}
             <div className="d-flex flex-row mt-4">

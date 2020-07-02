@@ -1,12 +1,15 @@
 {
-  "users":[
-
-  ],
+  "users":[],
   "concerts": [
     {
       "concertName": "Blackpink World Tour (In Your Area Jakarta)",
       "artist": "Blackpink",
-      "price" : 1000000,
+      "vvipPrice" : 10000000,
+      "vvipCapacity" : 20,
+      "vipPrice" : 5000000,
+      "vipCapacity" : 20,
+      "regularPrice" : 2000000,
+      "regularCapacity" : 20,
       "location": "ICE BSD",
       "date": "20 januari 2019",
       "image": "https://cdn-brilio-net.akamaized.net/news/2018/12/05/155902/957791-1000xauto-fakta-konser-blackpin-.jpg",
