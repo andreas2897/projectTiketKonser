@@ -5,8 +5,6 @@ const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
 const init_state = {
   id: 0,
   username: "",
-  fullName: "",
-  address: {},
   role: "",
   errMsg: "",
   cookieChecked: false,
@@ -16,11 +14,10 @@ const init_state = {
 export default (state = init_state, action) => {
   switch (action.type) {
     case ON_LOGIN_SUCCESS:
-      const { username, fullName, role, id } = action.payload;
+      const { username, role, id } = action.payload;
       return {
         ...state,
         username,
-        fullName,
         role,
         id,
         cookieChecked: true,

@@ -19,58 +19,22 @@ class ProductDetails extends React.Component {
       vvipPrice: 0,
       vipPrice: 0,
       regularPrice: 0,
-      desc: "",
+      location: "",
       id: 0,
+    },
+    addToCartData: {
+      quantity: 0,
     },
   };
 
   addToCartHandler = () => {
-    // POST method ke /cart
-    // Isinya: userId, concertId, quantity
-    // console.log(this.props.user.id);
-
-    Axios.get(`${API_URL}/carts`, {
-      params: {
-        userId: this.props.user.id,
-        concertId: this.state.concertData.id,
-      },
-    }).then((res) => {
-      if (res.data.length) {
-        Axios.put(`${API_URL}/carts/${res.data[0].id}`, {
-          userId: this.props.user.id,
-          concertId: this.state.concertData.id,
-          quantity: res.data[0].quantity + 1,
-        })
-          .then((res) => {
-            swal(
-              "Add to cart",
-              "Your item has been added to your cart",
-              "success"
-            );
-            this.props.onFillCart(this.props.user.id);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        Axios.post(`${API_URL}/carts`, {
-          userId: this.props.user.id,
-          concertId: this.state.concertData.id,
-          quantity: 1,
-        })
-          .then((res) => {
-            swal(
-              "Add to cart",
-              "Your item has been added to your cart",
-              "success"
-            );
-            this.props.onFillCart(this.props.user.id);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
+    Axios.post(`${API_URL}/carts`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   componentDidMount() {
@@ -82,13 +46,9 @@ class ProductDetails extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-    this.renderConcertPrice();  
-    console.log(this.state.category)
   }
-  
+
   renderConcertPrice = () => {
-    console.log(this.state.category)
-    console.log(this.state.concertData.vvipPrice);
     switch (this.state.category) {
       case "vvip":
         return this.state.concertData.vvipPrice;
@@ -104,19 +64,19 @@ class ProductDetails extends React.Component {
   inputHandler = (e, field, form) => {
     let { value } = e.target;
     this.setState({
-        [form]: {
-            ...this.state[form],
-            [field]: value,
-        },
+      [form]: {
+        ...this.state[form],
+        [field]: value,
+      },
     });
-};
+  };
 
   render() {
     const {
       concertName,
       image,
       price,
-      desc,
+      location,
       artist,
       category,
       id,
@@ -134,7 +94,8 @@ class ProductDetails extends React.Component {
           <div className="col-6 d-flex flex-column justify-content-center">
             <h3>{concertName}</h3>
             <h4>{artist}</h4>
-            <div className="d-flex justify-content-between my-2 align-items-center">
+            <p className="mt-4">{location}</p>
+            <div className="d-flex justify-content-between align-items-center">
               <h5>Category :</h5>
               <select
                 value={this.state.category}
@@ -149,15 +110,31 @@ class ProductDetails extends React.Component {
                 <option value="vip">VIP</option>
                 <option value="regular">REGULAR</option>
               </select>
-              {console.log(this.state.category)}
             </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <h5>Quantity :</h5>
+              <select
+                value={this.state.category}
+                onChange={(e) =>
+                  this.setState({
+                    quantity: e.target.value,
+                  })
+                }
+                className="form-control w-50"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+
             <h5>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR",
               }).format(this.renderConcertPrice())}
             </h5>
-            <p className="mt-4">{desc}</p>
+
             {/* <TextField type="number" placeholder="Quantity" className="mt-3" /> */}
             <div className="d-flex flex-row mt-4">
               <ButtonUI onClick={this.addToCartHandler}>Add To Cart</ButtonUI>

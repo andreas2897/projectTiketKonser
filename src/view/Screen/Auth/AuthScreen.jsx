@@ -8,7 +8,7 @@ import ButtonUI from "../../components/Button/Button";
 import "./AuthScreen.css";
 
 // actions
-// import { registerHandler, loginHandler } from "../../../redux/actions";
+import { registerHandler, loginHandler } from "../../../redux/actions";
 
 class AuthScreen extends React.Component {
   state = {
@@ -20,7 +20,6 @@ class AuthScreen extends React.Component {
     },
     registerForm: {
       username: "",
-      fullName: "",
       email: "",
       password: "",
       showPassword: false,
@@ -52,10 +51,9 @@ class AuthScreen extends React.Component {
   };
 
   registerBtnHandler = () => {
-    const { username, fullName, password, email } = this.state.registerForm;
+    const { username, password, email } = this.state.registerForm;
     let newUser = {
       username,
-      fullName,
       password,
       email,
     };
@@ -92,20 +90,12 @@ class AuthScreen extends React.Component {
       return (
         <div className="mt-5">
           <h3>Register</h3>
-          <p className="mt-4">
-            You will get the best recommendation for rent house in near of you
-          </p>
+          <p className="mt-4">You will get the best entertainment</p>
           <TextField
             value={this.state.registerForm.username}
             onChange={(e) => this.inputHandler(e, "username", "registerForm")}
             placeholder="Username"
             className="mt-5"
-          />
-          <TextField
-            value={this.state.registerForm.fullName}
-            onChange={(e) => this.inputHandler(e, "fullName", "registerForm")}
-            placeholder="Name"
-            className="mt-2"
           />
           <TextField
             value={this.state.registerForm.email}
@@ -216,7 +206,11 @@ class AuthScreen extends React.Component {
             {this.renderAuthComponent()}
           </div>
           <div className="col-7">
-              <img src="https://0.soompi.io/wp-content/uploads/2016/10/21084602/Mina.jpg" alt=""  height= "580px"/>
+            <img
+              src="https://0.soompi.io/wp-content/uploads/2016/10/21084602/Mina.jpg"
+              alt=""
+              height="580px"
+            />
           </div>
         </div>
       </div>
@@ -231,8 +225,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-//   onRegister: registerHandler,
-//   onLogin: loginHandler,
+  onRegister: registerHandler,
+  onLogin: loginHandler,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthScreen);
