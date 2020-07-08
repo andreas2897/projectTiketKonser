@@ -7,8 +7,6 @@ const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
 
 const cookieObj = new Cookie();
 
-const API_URL = "http://localhost:8080";
-
 export const loginHandler = (userData) => {
   return (dispatch) => {
     const { username, password } = userData;
@@ -119,7 +117,7 @@ export const registerHandler = (userData) => {
                 type: ON_LOGIN_SUCCESS,
                 payload: res.data,
               });
-              alert("hore");
+
               // Axios.get(`${API_URL}/carts`, {
               //   params: {
               //     userId: res.data.id,
