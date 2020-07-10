@@ -6,12 +6,12 @@ import { faHeart, faStar } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 
 interface ProductCardData {
-  id : number;
+  id: number;
   concertName: string;
-  artist: number;
+  concertArtist: number;
   review: number;
-  image: string;
-  location : string;
+  concertImage: string;
+  concertLocation: string;
 }
 
 type ProductCardProps = {
@@ -21,23 +21,28 @@ type ProductCardProps = {
 
 class ProductCard extends React.Component<ProductCardProps> {
   render() {
-    const { id, concertName, artist, review, image } = this.props.data;
+    const {
+      id,
+      concertName,
+      concertArtist,
+      review,
+      concertImage,
+    } = this.props.data;
 
     return (
       <div className={`product-card d-inline-block ${this.props.className}`}>
         <img
-          src={image}
+          src={concertImage}
           alt={this.props.data.concertName}
           style={{ width: "224px", height: "250px", objectFit: "contain" }}
         />
         <div>
           <p className="mt-3">{concertName}</p>
           <h5 style={{ fontWeight: "bolder" }}>
-          {this.props.data.artist}
+            {this.props.data.concertArtist}
           </h5>
-          <p className="small">{this.props.data.location}</p>
+          <p className="small">{this.props.data.concertLocation}</p>
         </div>
-       
       </div>
     );
   }

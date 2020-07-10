@@ -13,13 +13,13 @@ class ProductDetails extends React.Component {
   state = {
     category: "vvip",
     concertData: {
-      image: "",
+      concertImage: "",
       concertName: "",
-      artist: "",
+      concertArtist: "",
       vvipPrice: 0,
       vipPrice: 0,
       regularPrice: 0,
-      location: "",
+      concertLocation: "",
       id: 0,
     },
     addToCartData: {
@@ -38,7 +38,7 @@ class ProductDetails extends React.Component {
   };
 
   componentDidMount() {
-    Axios.get(`${API_URL}/concerts/${this.props.match.params.concertId}`)
+    Axios.get(`${API_URL}/concert/${this.props.match.params.concertId}`)
       .then((res) => {
         this.setState({ concertData: res.data });
         // console.log(this.state.concertData.vvipPrice);
@@ -74,10 +74,10 @@ class ProductDetails extends React.Component {
   render() {
     const {
       concertName,
-      image,
+      concertImage,
       price,
-      location,
-      artist,
+      concertLocation,
+      concertArtist,
       category,
       id,
     } = this.state.concertData;
@@ -87,14 +87,14 @@ class ProductDetails extends React.Component {
           <div className="col-6 text-center">
             <img
               style={{ width: "100%", objectFit: "contain", height: "550px" }}
-              src={image}
+              src={concertImage}
               alt=""
             />
           </div>
           <div className="col-6 d-flex flex-column justify-content-center">
             <h3>{concertName}</h3>
-            <h4>{artist}</h4>
-            <p className="mt-4">{location}</p>
+            <h4>{concertArtist}</h4>
+            <p className="mt-4">{concertLocation}</p>
             <div className="d-flex justify-content-between align-items-center">
               <h5>Category :</h5>
               <select

@@ -2,6 +2,7 @@ import Axios from "axios";
 // import { API_URL } from "../../constants/API";
 import Cookie from "universal-cookie";
 import userTypes from "../types/user";
+import { API_URL } from "../../constants/API";
 
 const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
 
@@ -47,40 +48,36 @@ export const loginHandler = (userData) => {
 
 export const userKeepLogin = (userData) => {
   return (dispatch) => {
-    Axios.get(`${API_URL}/users`, {
+    Axios.get(`${API_URL}/users/keeplogin`, {
       params: {
         id: userData.id,
       },
     })
       .then((res) => {
-        if (res.data.length > 0) {
-          dispatch({
-            type: ON_LOGIN_SUCCESS,
-            payload: res.data[0],
-          });
-          Axios.get(`${API_URL}/carts`, {
-            params: {
-              userId: res.data[0].id,
-            },
-          })
-            .then((res) => {
-              dispatch({
-                type: "FILL_CART",
-                payload: res.data.length,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          dispatch({
-            type: ON_LOGIN_FAIL,
-            payload: "Username atau password salah",
-          });
-        }
+        dispatch({
+          type: ON_LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        // Axios.get(`${API_URL}/carts`, {
+        //   params: {
+        //     userId: res.data[0].id,
+        //   },
+        // })
+        //   .then((res) => {
+        //     dispatch({
+        //       type: "FILL_CART",
+        //       payload: res.data.length,
+        //     });
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
       })
       .catch((err) => {
-        console.log(err);
+        dispatch({
+          type: ON_LOGIN_FAIL,
+          payload: "Username atau password salah",
+        });
       });
   };
 };

@@ -44,16 +44,6 @@
       "image": "https://bandwagon-gig-finder.s3.amazonaws.com/editorials/uploads/pictures/21712/content_stray-kids-world-tour-2020-poster.jpg",
       "group": "boygroup",
       "id": 3
-    },
-    {
-      "concertName": "Map of The Soul Tour",
-      "artist": "BTS",
-      "location": "Unconfirmed",
-      "price": 1000000,
-      "date": "Unconfirmed",
-      "image": "https://mmc.tirto.id/image/2020/01/22/bts-map-of-the-soul-tour-.jpg",
-      "group": "boygroup",
-      "id": 4
     }
   ],
   "carts": [],

@@ -36,6 +36,10 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
+  logoutBtnHandler = () => {
+    this.props.onLogout();
+  };
+
   render() {
     return (
       <div className="d-flex flex-row justify-content-between align-items-center py-4 navbar-container">

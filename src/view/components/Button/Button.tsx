@@ -4,7 +4,7 @@ import "./Button.css";
 type ButtonTypes = {
   type?: "contained" | "outlined" | "textual";
   children: any;
-  style?: CSSProperties;
+  style: CSSProperties;
   className?: string;
   onClick?: any;
 };
