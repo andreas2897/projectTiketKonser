@@ -7,30 +7,46 @@ import ButtonUI from "../../components/Button/Button";
 import TextField from "../../components/TextField/TextField";
 import Axios from "axios";
 import { API_URL } from "../../../constants/API";
-// import { fillCart } from "../../../redux/actions";
+import { fillCart } from "../../../redux/actions";
 
 class ProductDetails extends React.Component {
   state = {
     category: "vvip",
+    quantity: 1,
+    totalPrice: 0,
     concertData: {
-      concertImage: "",
+      id: 0,
       concertName: "",
       concertArtist: "",
-      vvipPrice: 0,
-      vipPrice: 0,
-      regularPrice: 0,
       concertLocation: "",
-      id: 0,
+      concertImage: "",
+      concertDate: "",
+      category: "",
+      vvipPrice: "",
+      vvipCapacity: 0,
+      vipPrice: "",
+      vipCapacity: 0,
+      regularPrice: "",
+      regularCapacity: 0,
     },
     addToCartData: {
-      quantity: 0,
+      quantity: 1,
     },
   };
 
   addToCartHandler = () => {
-    Axios.post(`${API_URL}/carts`)
+    Axios.post(
+      `${API_URL}/carts/addcart/${this.props.user.id}/${this.state.concertData.id}`,
+      this.state.addToCartData,
+      {
+        params: {
+          totalPrice: this.renderConcertPrice() * this.state.quantity,
+        },
+      }
+    )
       .then((res) => {
         console.log(res.data);
+        swal("Success!", "Your item has been added", "success");
       })
       .catch((err) => {
         console.log(err);
@@ -69,6 +85,10 @@ class ProductDetails extends React.Component {
         [field]: value,
       },
     });
+  };
+
+  renderTotalPrice = () => {
+    return this.renderConcertPrice() * this.state.addToCartData.quantity;
   };
 
   render() {
@@ -114,10 +134,13 @@ class ProductDetails extends React.Component {
             <div className="d-flex justify-content-between align-items-center">
               <h5>Quantity :</h5>
               <select
-                value={this.state.category}
+                value={this.state.addToCartData.quantity}
                 onChange={(e) =>
                   this.setState({
-                    quantity: e.target.value,
+                    addToCartData: {
+                      ...this.state.addToCartData,
+                      quantity: e.target.value,
+                    },
                   })
                 }
                 className="form-control w-50"
@@ -127,20 +150,15 @@ class ProductDetails extends React.Component {
                 <option value="3">3</option>
               </select>
             </div>
-
             <h5>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR",
-              }).format(this.renderConcertPrice())}
+              }).format(this.renderTotalPrice())}
             </h5>
-
             {/* <TextField type="number" placeholder="Quantity" className="mt-3" /> */}
-            <div className="d-flex flex-row mt-4">
-              <ButtonUI onClick={this.addToCartHandler}>Add To Cart</ButtonUI>
-              <ButtonUI className="ml-4" type="outlined">
-                Add To Wishlist
-              </ButtonUI>
+            <div className="d-flex flex-row mt-4 align-items-center">
+              <ButtonUI onClick={this.addToCartHandler}>Buy</ButtonUI>
             </div>
           </div>
         </div>
@@ -156,7 +174,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  // onFillCart: fillCart,
+  onFillCart: fillCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);

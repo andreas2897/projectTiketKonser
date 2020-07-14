@@ -3,6 +3,7 @@ import Axios from "axios";
 import Cookie from "universal-cookie";
 import userTypes from "../types/user";
 import { API_URL } from "../../constants/API";
+import swal from "sweetalert";
 
 const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
 
@@ -114,6 +115,7 @@ export const registerHandler = (userData) => {
                 type: ON_LOGIN_SUCCESS,
                 payload: res.data,
               });
+              swal("Success!", "Please check your email to verify", "success");
 
               // Axios.get(`${API_URL}/carts`, {
               //   params: {

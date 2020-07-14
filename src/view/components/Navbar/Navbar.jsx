@@ -26,8 +26,8 @@ class Navbar extends React.Component {
     searchBarIsFocused: false,
     searcBarInput: "",
     dropdownOpen: false,
-    cartCount: 0,
   };
+
   onFocus = () => {
     this.setState({ searchBarIsFocused: true });
   };
@@ -38,6 +38,11 @@ class Navbar extends React.Component {
 
   logoutBtnHandler = () => {
     this.props.onLogout();
+    // this.forceUpdate();
+  };
+
+  toggleDropdown = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
   render() {
@@ -64,10 +69,7 @@ class Navbar extends React.Component {
               this.state.searchBarIsFocused ? "active" : null
             }`}
             type="text"
-            placeholder="Find your idol here"
-            onChange={(e) => {
-              this.props.searchProduct(e.target.value);
-            }}
+            placeholder="Cari produk impianmu disini"
           />
         </div>
         <div className="d-flex flex-row align-items-center">
@@ -104,7 +106,9 @@ class Navbar extends React.Component {
                     </>
                   ) : (
                     <>
-                      <DropdownItem>Wishlist</DropdownItem>
+                      <DropdownItem>
+                        <Link to="/profile">Profile</Link>
+                      </DropdownItem>
                       <DropdownItem>
                         <Link to="/history">History</Link>
                       </DropdownItem>
@@ -133,10 +137,6 @@ class Navbar extends React.Component {
                 className="ml-3"
                 type="textual"
               >
-                <Link
-                  style={{ textDecoration: "none", color: "inherit" }}
-                  to="/"
-                ></Link>
                 Logout
               </ButtonUI>
             </>
@@ -170,10 +170,8 @@ const mapStateToProps = (state) => {
     user: state.user,
   };
 };
-
 const mapDispatchToProps = {
   onLogout: logoutHandler,
   onChangeSearch: navbarInputHandler,
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

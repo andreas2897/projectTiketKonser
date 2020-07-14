@@ -20,7 +20,6 @@ class AdminDashboard extends React.Component {
       concertImage: "",
       concertDate: "",
       category: "girlgroup",
-      image: "",
       vvipPrice: "",
       vvipCapacity: 0,
       vipPrice: "",
@@ -30,11 +29,18 @@ class AdminDashboard extends React.Component {
     },
     editForm: {
       id: 0,
-      productName: "",
-      price: 0,
+      concertName: "",
+      concertArtist: "",
+      concertLocation: "",
+      concertImage: "",
+      concertDate: "",
       category: "",
-      image: "",
-      desc: "",
+      vvipPrice: "",
+      vvipCapacity: 0,
+      vipPrice: "",
+      vipCapacity: 0,
+      regularPrice: "",
+      regularCapacity: 0,
     },
     activeProducts: [],
     modalOpen: false,
@@ -52,7 +58,7 @@ class AdminDashboard extends React.Component {
 
   renderProductList = () => {
     return this.state.productList.map((val, idx) => {
-      const { id, concertName, price, category, image, desc } = val;
+      const { id, concertName, category, concertImage } = val;
       return (
         <>
           <tr
@@ -72,13 +78,6 @@ class AdminDashboard extends React.Component {
           >
             <td> {id} </td>
             <td> {concertName} </td>
-            <td>
-              {" "}
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              }).format(price)}{" "}
-            </td>
           </tr>
           <tr
             className={`collapse-item ${
@@ -88,26 +87,12 @@ class AdminDashboard extends React.Component {
             <td className="" colSpan={3}>
               <div className="d-flex justify-content-around align-items-center">
                 <div className="d-flex">
-                  <img src={image} alt="" />
+                  <img src={concertImage} alt="" />
                   <div className="d-flex flex-column ml-4 justify-content-center">
                     <h5>{concertName}</h5>
                     <h6 className="mt-2">
                       Category:
                       <span style={{ fontWeight: "normal" }}> {category}</span>
-                    </h6>
-                    <h6>
-                      Price:
-                      <span style={{ fontWeight: "normal" }}>
-                        {" "}
-                        {new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                        }).format(price)}
-                      </span>
-                    </h6>
-                    <h6>
-                      Description:
-                      <span style={{ fontWeight: "normal" }}> {desc}</span>
                     </h6>
                   </div>
                 </div>
@@ -118,7 +103,11 @@ class AdminDashboard extends React.Component {
                   >
                     Edit
                   </ButtonUI>
-                  <ButtonUI className="mt-3" type="textual">
+                  <ButtonUI
+                    onClick={() => this.deleteProductHandler(idx)}
+                    className="mt-3"
+                    type="textual"
+                  >
                     Delete
                   </ButtonUI>
                 </div>
@@ -146,11 +135,19 @@ class AdminDashboard extends React.Component {
         swal("Success!", "Your item has been added to the list", "success");
         this.setState({
           createForm: {
-            productName: "",
-            price: 0,
-            category: "Phone",
+            concertName: "",
+            concertArtist: "",
+            concertLocation: "",
+            concertImage: "",
+            concertDate: "",
+            category: "girlgroup",
             image: "",
-            desc: "",
+            vvipPrice: "",
+            vvipCapacity: 0,
+            vipPrice: "",
+            vipCapacity: 0,
+            regularPrice: "",
+            regularCapacity: 0,
           },
         });
         this.getProductList();
@@ -170,8 +167,8 @@ class AdminDashboard extends React.Component {
   };
 
   editProductHandler = () => {
-    Axios.put(
-      `${API_URL}/products/${this.state.editForm.id}`,
+    Axios.post(
+      `${API_URL}/concert/${this.state.editForm.id}`,
       this.state.editForm
     )
       .then((res) => {
@@ -181,6 +178,19 @@ class AdminDashboard extends React.Component {
       })
       .catch((err) => {
         swal("Error!", "Your item could not be edited", "error");
+        console.log(err);
+      });
+  };
+
+  deleteProductHandler = (id) => {
+    console.log(this.state.productList[id].id);
+    Axios.delete(`${API_URL}/concert/${this.state.productList[id].id}`)
+      .then((res) => {
+        swal("Success!", "Your item has been deleted", "success");
+        this.getProductList();
+      })
+      .catch((err) => {
+        swal("Error!", "Your item could not be deleted", "error");
         console.log(err);
       });
   };
@@ -205,7 +215,6 @@ class AdminDashboard extends React.Component {
               <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Price</th>
               </tr>
             </thead>
             <tbody>{this.renderProductList()}</tbody>
@@ -341,41 +350,37 @@ class AdminDashboard extends React.Component {
         >
           <ModalHeader toggle={this.toggleModal}>
             <caption>
-              <h3>Edit Product</h3>
+              <h3>Edit Concert</h3>
             </caption>
           </ModalHeader>
           <ModalBody>
             <div className="row">
               <div className="col-8">
                 <TextField
-                  value={this.state.editForm.productName}
-                  placeholder="Product Name"
+                  value={this.state.editForm.concertName}
+                  placeholder="Concert Name"
                   onChange={(e) =>
-                    this.inputHandler(e, "productName", "editForm")
+                    this.inputHandler(e, "concertName", "editForm")
                   }
                 />
               </div>
               <div className="col-4">
                 <TextField
-                  value={this.state.editForm.price}
-                  placeholder="Price"
-                  onChange={(e) => this.inputHandler(e, "price", "editForm")}
+                  value={this.state.editForm.concertDate}
+                  placeholder="Date"
+                  type="date"
+                  onChange={(e) =>
+                    this.inputHandler(e, "concertDate", "editForm")
+                  }
                 />
-              </div>
-              <div className="col-12 mt-3">
-                <textarea
-                  value={this.state.editForm.desc}
-                  onChange={(e) => this.inputHandler(e, "desc", "editForm")}
-                  style={{ resize: "none" }}
-                  placeholder="Description"
-                  className="custom-text-input"
-                ></textarea>
               </div>
               <div className="col-6 mt-3">
                 <TextField
-                  value={this.state.editForm.image}
-                  placeholder="Image Source"
-                  onChange={(e) => this.inputHandler(e, "image", "editForm")}
+                  value={this.state.editForm.concertArtist}
+                  placeholder="Artist Name"
+                  onChange={(e) =>
+                    this.inputHandler(e, "concertArtist", "editForm")
+                  }
                 />
               </div>
               <div className="col-6 mt-3">
@@ -388,8 +393,81 @@ class AdminDashboard extends React.Component {
                   <option value="boygroup">Boygroup</option>
                 </select>
               </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.concertLocation}
+                  placeholder="Concert Location"
+                  onChange={(e) =>
+                    this.inputHandler(e, "concertLocation", "editForm")
+                  }
+                />
+              </div>{" "}
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.concertImage}
+                  placeholder="Concert Image"
+                  onChange={(e) =>
+                    this.inputHandler(e, "concertImage", "editForm")
+                  }
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.vvipPrice}
+                  placeholder="VVIP price"
+                  onChange={(e) =>
+                    this.inputHandler(e, "vvipPrice", "editForm")
+                  }
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.vvipCapacity}
+                  placeholder="VVIP capacity"
+                  type="number"
+                  onChange={(e) =>
+                    this.inputHandler(e, "vvipCapacity", "editForm")
+                  }
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.vipPrice}
+                  placeholder="VIP price"
+                  onChange={(e) => this.inputHandler(e, "vipPrice", "editForm")}
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.vipCapacity}
+                  placeholder="VIP capacity"
+                  type="number"
+                  onChange={(e) =>
+                    this.inputHandler(e, "vipCapacity", "editForm")
+                  }
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.regularPrice}
+                  placeholder="Regular price"
+                  onChange={(e) =>
+                    this.inputHandler(e, "regularPrice", "editForm")
+                  }
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.regularCapacity}
+                  placeholder="Regular capacity"
+                  type="number"
+                  onChange={(e) =>
+                    this.inputHandler(e, "regularCapacity", "editForm")
+                  }
+                />
+              </div>
               <div className="col-12 text-center my-3">
-                <img src={this.state.editForm.image} alt="" />
+                <img src={this.state.editForm.concertImage} alt="" />
               </div>
               <div className="col-5 mt-3 offset-1">
                 <ButtonUI

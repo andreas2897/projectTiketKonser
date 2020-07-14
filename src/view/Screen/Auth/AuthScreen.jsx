@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import TextField from "../../components/TextField/TextField";
 import ButtonUI from "../../components/Button/Button";
 import "./AuthScreen.css";
+import swal from "sweetalert";
 
 // actions
 import { registerHandler, loginHandler } from "../../../redux/actions";
@@ -156,6 +157,9 @@ class AuthScreen extends React.Component {
             name="showPasswordLogin"
           />{" "}
           Show Password
+          <div className="d-flex justify-content-center">
+            <a href="http://localhost:3000/forgot">Forgot Password</a>
+          </div>
           <div className="d-flex justify-content-center">
             <ButtonUI
               onClick={this.loginBtnHandler}

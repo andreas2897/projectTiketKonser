@@ -10,12 +10,13 @@ import ProductDetails from "./view/Screen/ProductDetails/ProductDetails";
 import AdminDashboard from "./view/Screen/Admin/AdminDashboard";
 import { userKeepLogin, cookieChecker } from "./redux/actions";
 import { connect } from "react-redux";
+import UserProfile from "./view/Screen/User/UserProfile";
 
 const cookieObj = new Cookie();
 
 class App extends React.Component {
   componentDidMount() {
-    let cookieResult = cookieObj.get("authData", { path: "/" });
+    let cookieResult = cookieObj.get("authData");
     if (cookieResult) {
       this.props.keepLogin(cookieResult);
     } else {
@@ -23,18 +24,27 @@ class App extends React.Component {
     }
   }
   render() {
-    return (
-      <>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/auth" component={AuthScreen} />
-          <Route exact path="/admin/dashboard" component={AdminDashboard} />
-          <Route exact path="/concerts/:concertId" component={ProductDetails} />
-        </Switch>
-        <div style={{ height: "120px" }} />
-      </>
-    );
+    if (this.props.user.cookieChecked) {
+      return (
+        <>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/auth" component={AuthScreen} />
+            <Route exact path="/profile" component={UserProfile} />
+            <Route exact path="/admin/dashboard" component={AdminDashboard} />
+            <Route
+              exact
+              path="/concerts/:concertId"
+              component={ProductDetails}
+            />
+          </Switch>
+          <div style={{ height: "120px" }} />
+        </>
+      );
+    } else {
+      return <div>Loading....</div>;
+    }
   }
 }
 
