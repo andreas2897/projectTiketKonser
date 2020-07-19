@@ -2,11 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
-
+import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import TextField from "../../components/TextField/TextField";
 import ButtonUI from "../../components/Button/Button";
 import "./AuthScreen.css";
 import swal from "sweetalert";
+import Axios from "axios";
+import { API_URL } from "../../../constants/API";
 
 // actions
 import { registerHandler, loginHandler } from "../../../redux/actions";
@@ -25,6 +27,10 @@ class AuthScreen extends React.Component {
       password: "",
       showPassword: false,
     },
+    modalOpen: false,
+    forgotPass: {
+      email: "",
+    },
   };
 
   componentDidUpdate() {
@@ -33,6 +39,10 @@ class AuthScreen extends React.Component {
       cookie.set("authData", JSON.stringify(this.props.user), { path: "/" });
     }
   }
+
+  toggleModal = () => {
+    this.setState({ modalOpen: !this.state.modalOpen });
+  };
 
   inputHandler = (e, field, form) => {
     const { value } = e.target;
@@ -158,7 +168,9 @@ class AuthScreen extends React.Component {
           />{" "}
           Show Password
           <div className="d-flex justify-content-center">
-            <a href="http://localhost:3000/forgot">Forgot Password</a>
+            <ButtonUI onClick={this.toggleModal} type="textual">
+              Forgot Password
+            </ButtonUI>
           </div>
           <div className="d-flex justify-content-center">
             <ButtonUI
@@ -172,6 +184,18 @@ class AuthScreen extends React.Component {
         </div>
       );
     }
+  };
+
+  sendEmail = () => {
+    console.log(this.state.forgotPass.email);
+    Axios.get(`${API_URL}/users/email/${this.state.forgotPass.email}`)
+      .then((res) => {
+        console.log(res.data);
+        swal("Success", "Check Email", "success");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -217,6 +241,33 @@ class AuthScreen extends React.Component {
             />
           </div>
         </div>
+        <Modal
+          toggle={this.toggleModal}
+          isOpen={this.state.modalOpen}
+          className="edit-modal"
+        >
+          <ModalHeader toggle={this.toggleModal}>
+            <caption>
+              <h3>Forgot Password</h3>
+            </caption>
+          </ModalHeader>
+          <ModalBody>
+            <div className="row justify-content-center">
+              <TextField
+                value={this.state.forgotPass.email}
+                placeholder="Email"
+                onChange={(e) => this.inputHandler(e, "email", "forgotPass")}
+              />
+            </div>
+            <ButtonUI
+              className="w-100"
+              onClick={this.sendEmail}
+              type="outlined"
+            >
+              Kirim Email
+            </ButtonUI>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
