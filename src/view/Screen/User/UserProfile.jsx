@@ -142,7 +142,7 @@ class UserProfile extends React.Component {
   };
 
   render() {
-    const { username, fullname, address, email } = this.state.listProfile;
+    const { username, fullname, email } = this.state.listProfile;
     if (!this.props.user.id) {
       return <Link to="/" />;
     } else {

@@ -10,6 +10,8 @@ const {
   ON_LOGIN_SUCCESS,
   ON_LOGOUT_SUCCESS,
   ON_UPDATE_QUANTITY_CART,
+  ON_REGISTER_SUCCESS,
+  ON_REGISTER_FAIL,
 } = userTypes;
 
 const cookieObj = new Cookie();
@@ -97,53 +99,34 @@ export const logoutHandler = () => {
 
 export const registerHandler = (userData) => {
   return (dispatch) => {
-    Axios.get(`${API_URL}/users/username`, {
-      params: {
-        username: userData.username,
-      },
+    Axios.post(`${API_URL}/users`, {
+      ...userData,
+      role: "user",
     })
       .then((res) => {
-        if (res.data.length > 0) {
-          dispatch({
-            type: "ON_REGISTER_FAIL",
-            payload: "Username sudah digunakan",
-          });
-          alert("ga masuk");
-        } else {
-          Axios.post(`${API_URL}/users`, {
-            username: userData.username,
-            password: userData.password,
-            email: userData.email,
-          })
-            .then((res) => {
-              dispatch({
-                type: ON_LOGIN_SUCCESS,
-                payload: res.data,
-              });
-              swal("Success!", "Please check your email to verify", "success");
-
-              // Axios.get(`${API_URL}/carts`, {
-              //   params: {
-              //     userId: res.data.id,
-              //   },
-              // })
-              //   .then((res) => {
-              //     dispatch({
-              //       type: "FILL_CART",
-              //       payload: res.data.length,
-              //     });
-              //   })
-              //   .catch((err) => {
-              //     console.log(err);
-              //   });
-            })
-            .catch((err) => {
-              console.log(err);
+        swal("Success!", "Register Success", "success");
+        dispatch({
+          type: ON_REGISTER_SUCCESS,
+          payload: res.data,
+        });
+        Axios.get(`${API_URL}/carts/user/${res.data.id}`)
+          .then((res) => {
+            dispatch({
+              type: ON_UPDATE_QUANTITY_CART,
+              payload: res.data.length,
             });
-        }
+          })
+          .catch((err) => {
+            alert("GA MASUK");
+            console.log(err);
+          });
+        console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        dispatch({
+          type: ON_REGISTER_FAIL,
+          payload: err.response.data.message,
+        });
       });
   };
 };

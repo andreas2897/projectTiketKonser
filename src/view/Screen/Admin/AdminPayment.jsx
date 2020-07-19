@@ -64,50 +64,13 @@ class AdminPayments extends React.Component {
   }
 
   confirmBtnHandler = (transactionId) => {
-    Axios.patch(`${API_URL}/transaction/editTransaction/${transactionId}`, {
-      status: "success",
-      tanggalAcc: this.state.datePayments.toLocaleDateString(),
-    })
+    Axios.put(
+      `${API_URL}/transaction/accept/${transactionId}?acceptTime=${new Date().toLocaleDateString()}`
+    )
       .then((res) => {
-        this.getPaymentsList(this.state.status);
-        swal("Success!", "Berhasil", "success");
-        const { formEmail } = this.state;
-        console.log(formEmail);
-        Axios.post(
-          `${API_URL}/transaction/sendEmailSuccess/${transactionId}`,
-          formEmail
-        )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  rejectPermanentHandler = (transactionId) => {
-    Axios.patch(`${API_URL}/transaction/editTransaction/${transactionId}`, {
-      status: "rejectPermanent",
-    })
-      .then((res) => {
-        this.getPaymentsList(this.state.status);
-        swal("Success!", "Berhasil", "success");
-        const { formEmail } = this.state;
-        console.log(formEmail);
-        Axios.post(
-          `${API_URL}/transaction/sendEmailRejectPermanent/${transactionId}`,
-          formEmail
-        )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        console.log(res.data);
+        this.toggleModal();
+        this.renderProductList();
       })
       .catch((err) => {
         console.log(err);
@@ -115,28 +78,14 @@ class AdminPayments extends React.Component {
   };
 
   rejectBtnHandler = (transactionId) => {
-    Axios.patch(`${API_URL}/transaction/editTransaction/${transactionId}`, {
-      status: "reject",
-      tanggalReject: this.state.datePayments.toLocaleDateString(),
-    })
+    Axios.put(`${API_URL}/transaction/reject/${transactionId}`)
       .then((res) => {
-        this.getPaymentsList(this.state.status);
-        swal("Success!", "Berhasil", "success");
-        const { formEmail } = this.state;
-        console.log(formEmail);
-        Axios.post(
-          `${API_URL}/transaction/sendEmailReject/${transactionId}`,
-          formEmail
-        )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        console.log(res.data);
+        this.renderProductList();
       })
       .catch((err) => {
         console.log(err);
+        console.log(this.state.transactionId);
       });
   };
 
@@ -262,17 +211,6 @@ class AdminPayments extends React.Component {
                     </ButtonUI>
                   </>
                 ) : null}
-                {this.state.status == "reject" ? (
-                  <>
-                    <span>
-                      Reject Permanent ?<br />
-                      <FontAwesomeIcon
-                        icon={faTimes}
-                        onClick={(_) => this.rejectPermanentHandler(val.id)}
-                      />{" "}
-                    </span>
-                  </>
-                ) : null}
               </div>
             </center>
           </tr>
@@ -303,7 +241,7 @@ class AdminPayments extends React.Component {
                     <div className="row col-12">
                       <div className="col-3 pt-2">
                         <img
-                          src={val.products.image}
+                          src={val.concerts.concertImage}
                           alt=""
                           style={{ height: "120px", border: "1px solid black" }}
                         />
@@ -325,17 +263,7 @@ class AdminPayments extends React.Component {
                         <h6>
                           :{" "}
                           <span style={{ fontWeight: "normal" }}>
-                            {val.products.productName}
-                          </span>
-                        </h6>
-                        <h6>
-                          :{" "}
-                          <span style={{ fontWeight: "normal" }}>
-                            {" "}
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                            }).format(val.price)}
+                            {val.concerts.concertName}
                           </span>
                         </h6>
                         <h6>
@@ -352,7 +280,7 @@ class AdminPayments extends React.Component {
                             {new Intl.NumberFormat("id-ID", {
                               style: "currency",
                               currency: "IDR",
-                            }).format(val.totalPriceProduct)}
+                            }).format(val.totalPrice)}
                           </span>
                         </h6>
                       </div>
@@ -402,15 +330,6 @@ class AdminPayments extends React.Component {
                 onClick={() => this.getPaymentsList("reject")}
               >
                 Reject
-              </ButtonUI>
-              <ButtonUI
-                className={`nav-atas-btn ${
-                  this.state.status == "rejectPermanent" ? "active" : null
-                } ml-4`}
-                type="outlined"
-                onClick={() => this.getPaymentsList("rejectPermanent")}
-              >
-                Reject Permanent
               </ButtonUI>
             </div>
             <Table className="dashboard-table">

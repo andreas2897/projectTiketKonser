@@ -137,11 +137,6 @@ class Navbar extends React.Component {
                   icon={faShoppingCart}
                   style={{ fontSize: 24 }}
                 />
-                <CircleBg>
-                  <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
-                    {this.props.user.cartItems}
-                  </small>
-                </CircleBg>
               </Link>
               <ButtonUI
                 onClick={this.logoutBtnHandler}

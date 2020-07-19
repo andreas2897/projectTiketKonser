@@ -5,6 +5,8 @@ const {
   ON_LOGIN_SUCCESS,
   ON_LOGOUT_SUCCESS,
   ON_UPDATE_QUANTITY_CART,
+  ON_REGISTER_FAIL,
+  ON_REGISTER_SUCCESS,
 } = userTypes;
 
 const init_state = {
@@ -14,6 +16,9 @@ const init_state = {
   errMsg: "",
   cookieChecked: false,
   cartItems: 0,
+  email: "",
+  password: "",
+  is_verified: "",
 };
 
 export default (state = init_state, action) => {
@@ -37,8 +42,13 @@ export default (state = init_state, action) => {
       return { ...state, cookieChecked: true };
     case "FILL_CART":
       return { ...state, cartItems: action.payload };
-    case ON_UPDATE_QUANTITY_CART:
-      return { ...state, cartItemsCount: action.payload };
+    case ON_REGISTER_SUCCESS:
+      return {
+        ...init_state,
+        cookieChecked: true,
+      };
+    case ON_REGISTER_FAIL:
+      return { ...state, errMsg: action.payload, cookieChecked: true };
     default:
       return { ...state };
   }

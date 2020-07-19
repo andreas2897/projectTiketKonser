@@ -36,7 +36,6 @@ class UserCart extends React.Component {
   };
 
   fileUploadHandler = (e) => {
-    alert("hehe");
     this.setState({ selectedFile: e.target.files[0] });
   };
 
@@ -208,7 +207,9 @@ class UserCart extends React.Component {
           console.log(val.id);
           Axios.post(
             `${API_URL}/transactionDetail/${res.data.id}/${val.concerts.id}`,
-            this.state.transactionDetailLis,
+            {
+              ticketType: val.concerts.ticketType,
+            },
             {
               params: {
                 priceProduct: val.totalPrice,
@@ -219,14 +220,14 @@ class UserCart extends React.Component {
             .then((res) => {
               console.log(res.data);
 
-              // Axios.delete(`${API_URL}/cart/delete/${val.id}`)
-              //   .then((res) => {
-              //     console.log(res);
-              //     this.getAllCart();
-              //   })
-              //   .catch((err) => {
-              //     console.log(err);
-              //   });
+              Axios.delete(`${API_URL}/carts/delete/${val.id}`)
+                .then((res) => {
+                  console.log(res);
+                  this.renderCarts();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             })
             .catch((err) => {
               console.log(err);

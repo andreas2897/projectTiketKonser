@@ -114,6 +114,25 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <Carousel
+          className="carousel-item-home-bg "
+          next={this.nextHandler}
+          previous={this.prevHandler}
+          activeIndex={this.state.activeIndex}
+        >
+          {this.renderCarouselItems()}
+          <CarouselControl
+            directionText="Previous"
+            direction="prev"
+            onClickHandler={this.prevHandler}
+          />
+          <CarouselControl
+            directionText="Next"
+            direction="next"
+            onClickHandler={this.nextHandler}
+          />
+        </Carousel>
+
         <div className="d-flex justify-content-center flex-row align-items-center my-3">
           <Link
             to="/"
@@ -138,27 +157,10 @@ class Home extends React.Component {
           </Link>
         </div>
 
-        <Carousel
-          className="carousel-item-home-bg "
-          next={this.nextHandler}
-          previous={this.prevHandler}
-          activeIndex={this.state.activeIndex}
-        >
-          {this.renderCarouselItems()}
-          <CarouselControl
-            directionText="Previous"
-            direction="prev"
-            onClickHandler={this.prevHandler}
-          />
-          <CarouselControl
-            directionText="Next"
-            direction="next"
-            onClickHandler={this.nextHandler}
-          />
-        </Carousel>
         <div className="row d-flex flex-wrap justify-content-center">
           {this.renderConcert()}
         </div>
+
         <div className="py-5" style={{ marginTop: "100px" }}>
           <div className="container">
             <div className="row">
