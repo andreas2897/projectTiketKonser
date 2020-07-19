@@ -5,7 +5,12 @@ import userTypes from "../types/user";
 import { API_URL } from "../../constants/API";
 import swal from "sweetalert";
 
-const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
+const {
+  ON_LOGIN_FAIL,
+  ON_LOGIN_SUCCESS,
+  ON_LOGOUT_SUCCESS,
+  ON_UPDATE_QUANTITY_CART,
+} = userTypes;
 
 const cookieObj = new Cookie();
 
@@ -163,6 +168,22 @@ export const fillCart = (userId) => {
         });
       })
       .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const qtyCartHandler = (userId) => {
+  return (dispatch) => {
+    Axios.get(`${API_URL}/carts/user/${userId}`)
+      .then((res) => {
+        dispatch({
+          type: ON_UPDATE_QUANTITY_CART,
+          payload: res.data.length,
+        });
+      })
+      .catch((err) => {
+        alert("GA MASUK");
         console.log(err);
       });
   };

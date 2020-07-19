@@ -1,6 +1,11 @@
 import userTypes from "../types/user";
 
-const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
+const {
+  ON_LOGIN_FAIL,
+  ON_LOGIN_SUCCESS,
+  ON_LOGOUT_SUCCESS,
+  ON_UPDATE_QUANTITY_CART,
+} = userTypes;
 
 const init_state = {
   id: 0,
@@ -32,6 +37,8 @@ export default (state = init_state, action) => {
       return { ...state, cookieChecked: true };
     case "FILL_CART":
       return { ...state, cartItems: action.payload };
+    case ON_UPDATE_QUANTITY_CART:
+      return { ...state, cartItemsCount: action.payload };
     default:
       return { ...state };
   }

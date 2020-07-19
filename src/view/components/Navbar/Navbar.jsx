@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import profileImages from "../../../assets/images/showcase/default_profile.jpg";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/";
@@ -80,7 +81,17 @@ class Navbar extends React.Component {
                 isOpen={this.state.dropdownOpen}
               >
                 <DropdownToggle tag="div" className="d-flex">
-                  <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
+                  {/* <FontAwesomeIcon icon={"images"} style={{ fontSize: 24 }} /> */}
+                  <img
+                    src={profileImages}
+                    style={{
+                      width: "50px",
+                      objectFit: "contain",
+                      height: "50%",
+                      borderRadius: 16,
+                    }}
+                    alt=""
+                  />
                   <p className="small ml-3 mr-4">{this.props.user.username}</p>
                 </DropdownToggle>
                 <DropdownMenu className="mt-2">

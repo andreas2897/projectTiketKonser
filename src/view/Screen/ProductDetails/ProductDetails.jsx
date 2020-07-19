@@ -12,7 +12,6 @@ import { fillCart } from "../../../redux/actions";
 class ProductDetails extends React.Component {
   state = {
     category: "vvip",
-    quantity: 1,
     totalPrice: 0,
     concertData: {
       id: 0,
@@ -40,7 +39,9 @@ class ProductDetails extends React.Component {
       this.state.addToCartData,
       {
         params: {
-          totalPrice: this.renderConcertPrice() * this.state.quantity,
+          totalPrice:
+            this.renderConcertPrice() * this.state.addToCartData.quantity,
+          ticketType: this.state.category,
         },
       }
     )
@@ -57,7 +58,7 @@ class ProductDetails extends React.Component {
     Axios.get(`${API_URL}/concert/${this.props.match.params.concertId}`)
       .then((res) => {
         this.setState({ concertData: res.data });
-        // console.log(this.state.concertData.vvipPrice);
+        this.renderBuyButton();
       })
       .catch((err) => {
         console.log(err);
@@ -91,10 +92,20 @@ class ProductDetails extends React.Component {
     return this.renderConcertPrice() * this.state.addToCartData.quantity;
   };
 
+  renderBuyButton = () => {
+    const today = new Date();
+    if (today.toString() >= this.state.concertData.concertDate.toString()) {
+      return <ButtonUI onClick={this.addToCartHandler}>Buy</ButtonUI>;
+    } else {
+      return <h5>Your Concert already passed</h5>;
+    }
+  };
+
   render() {
     const {
       concertName,
       concertImage,
+      concertDate,
       price,
       concertLocation,
       concertArtist,
@@ -114,7 +125,10 @@ class ProductDetails extends React.Component {
           <div className="col-6 d-flex flex-column justify-content-center">
             <h3>{concertName}</h3>
             <h4>{concertArtist}</h4>
-            <p className="mt-4">{concertLocation}</p>
+            <h4>
+              {concertLocation},{concertDate}
+            </h4>
+            <p></p>
             <div className="d-flex justify-content-between align-items-center">
               <h5>Category :</h5>
               <select
@@ -158,7 +172,7 @@ class ProductDetails extends React.Component {
             </h5>
             {/* <TextField type="number" placeholder="Quantity" className="mt-3" /> */}
             <div className="d-flex flex-row mt-4 align-items-center">
-              <ButtonUI onClick={this.addToCartHandler}>Buy</ButtonUI>
+              {this.renderBuyButton()}
             </div>
           </div>
         </div>
